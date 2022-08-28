@@ -1,18 +1,47 @@
 <html>
     <head>
         <title>Reaction time game</title>
-        <script></script>
+        <script>
+            function whichElement(e) {
+                var targ;
+                if (!e) {
+                    var e = window.event;
+                }
+                if (e.target) {
+                    targ = e.target.srcElementID;
+                } else if (e.srcElementID) {
+                    targ = e.srcElementID;
+                }
+                alert("You clicked on " + targ + ".");
+            }
+/*            function getArea (e) {
+                var targ;
+                if (!e) {
+                    var e = window.event;
+              } else if (e.srcElement) {
+                    targ = e.srcElementID;
+                    changeColour(targ)
+                }
+            }
+            function changeColour(area) {
+                document.getElementbyID("area1").bgcolor = blue;
+            }
+            */
+        </script>
     </head>
-    <body>
-        <h1>Reaction Time Game</h1>
-        <table>
-            <tr>
-                <td>Area 1</td>
-                <td>Area 2</td>
+    <body onmousedown="whichElement(event)">
+        
+        <table width="100%" height="100%">
+            <th width="100%" height="10%" colspan="2">
+                <h1>Reaction Time Game</h1>
+            </th>
+            <tr height="45%">
+                <td id="area1" width="50%" bgcolor="red">Area 1</td>
+                <td id="area2" width="50%" bgcolor="blue">Area 2</td>
             </tr>
-            <tr>
-                <td>Area 3</td>
-                <td>Area 4</td>
+            <tr height="45%">
+                <td id="area3" width="50%" bgcolor="yellow">Area 3</td>
+                <td id="area4" width="50%" bgcolor="green">Area 4</td>
             </tr>
         </table>
     </body>
