@@ -3,16 +3,17 @@
         <title>Reaction time game</title>
         <script>
             function whichElement(e) {
-                var targ;
+                /*var targ;
                 if (!e) {
                     var e = window.event;
                 }
                 if (e.target) {
-                    targ = e.target.srcElementID;
+                    //targ = e.target.srcElementID;
+                    targ = e.srcElementID
                 } else if (e.srcElementID) {
                     targ = e.srcElementID;
-                }
-                alert("You clicked on " + targ + ".");
+                }*/
+                alert("You clicked on " + e + ".");
             }
 /*            function getArea (e) {
                 var targ;
@@ -29,9 +30,9 @@
             */
         </script>
     </head>
-    <body onmousedown="whichElement(event)">
+    <body onmousedown="whichElement(event.srcElement.id)">
         
-        <table width="100%" height="100%">
+        <table id="table" width="100%" height="100%">
             <th width="100%" height="10%" colspan="2">
                 <h1>Reaction Time Game</h1>
             </th>
