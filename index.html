@@ -50,17 +50,17 @@
             }
 
             function areaClicked (area) {
-                window.console.log(area)
                 // if game is not in play, do nothing
                 if (inPlay && !resultsColours.includes(area)) {
                     // do something
                     resultsColours.push(area)
-                    reactionTime = Date.now() - startTimer;
-                    resultTimings.push(reactionTime)
-                    
+                    window.console.log(resultsColours)
+                    //reactionTime = Date.now() - startTimer;
+                    resultTimings.push((Date.now() - startTimer))
+                    window.console.log(resultTimings)
                     
                     // TODO HERE NEXT TIME!
-                    area.style.backgroundColor = "grey";
+                    document.getElementById(area).style.backgroundColor = "grey";
 
                     if (resultTimings.length == 4) {
                         inPlay = false;
@@ -73,8 +73,12 @@
                 var results = "1st " + resultsColours[0] + "\t" + resultTimings[0] + "\n" +
                               "2nd " + resultsColours[1] + "\t" + resultTimings[1] + "\n" +  
                               "3rd " + resultsColours[2] + "\t" + resultTimings[2] + "\n" +
-                              "4th " + resultsColours[3] + "\t" + resultTimings[3] + "\n" +
-                alert(results)
+                              "4th " + resultsColours[3] + "\t" + resultTimings[3] + "\n";
+                alert(results);
+                
+                // clear arrays
+                resultsColours.length = 0;
+                resultTimings.length = 0;
             }
 
             function whichElement(e) {
