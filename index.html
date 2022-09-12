@@ -2,128 +2,93 @@
     <head>
         <title>Reaction time game</title>
         <script>
-            var startDelay = 3000;  // delay before starting
             var noOfPlayers = 4;    // number of players
             var inPlay = false;
             var startTimer;
             const resultsColours = [];
             const resultTimings = [];
+            const colours = ["red", "blue", "yellow", "green"];
 
-            function nullFunction () {
-                // no function here
-            }
+            const playingTable = []
+            playingTable[1] = "<table width='100%' height='100%'><tr width='100%' height='100%'><td id='red' width='100%' height='100%' onmousedown='areaClicked(event.srcElement.id)'></td></tr></table>";
+            playingTable[2] = "<table width='100%' height='100%'><tr width='100%' height='50%'><td id='red' width='100% height='50%' onmousedown='areaClicked(event.srcElement.id)'></td></tr><tr width='100%' height='50%'><td id='blue' width='100%' height='50%' onmousedown='areaClicked(event.srcElement.id)'></td></tr></table>";
+            playingTable[3] = "<table width='100%' height='100%'><tr width='100%' height='33%'><td id='red' width='100%' height='33%' onmousedown='areaClicked(event.srcElement.id)'></td></tr><tr width='100%' height='33%'><td id='blue' width='100%' height='33%' onmousedown='areaClicked(event.srcElement.id)'></td></tr><tr width='100%' height='33%'><td id='yellow' width='100%' height='33%' onmousedown='areaClicked(event.srcElement.id)'></td></tr></table>";
+            playingTable[4] = "<table width='100%' height='100%'><tr width='100%' height='50%'><td id='red' width='50%' height='50%' onmousedown='areaClicked(event.srcElement.id)'></td><td id='blue' width='50%' height='50%' onmousedown='areaClicked(event.srcElement.id)'></td></tr><tr width='100%' height='50%'><td id='yellow' width='50%' height='50%' onmousedown='areaClicked(event.srcElement.id)'></td><td id='green' width='50%' height='50%' onmousedown='areaClicked(event.srcElement.id)'></td></tr></table>";
+
             function myStartButtonPressed() {
-
                 // a few variables to use for the game
-                var gameDelay = 1000;  // maximum delay after starting
-                gameDelay = Math.floor(Math.random() * gameDelay);
-                
+                var gameDelay = playDelaySlider.value;  // maximum delay after starting
+                gameDelay = Math.floor(Math.random() * gameDelay * 1000);
+                noOfPlayers = noOfPlayersSlider.value;
 
                 // change background colours to grey
-                red.style.backgroundColor = "grey";
-                blue.style.backgroundColor = "grey";
-                yellow.style.backgroundColor = "grey";
-                green.style.backgroundColor = "grey";
-
+                for (let i = 0; i < noOfPlayers; i++) {
+                    document.getElementById(colours[i]).style.backgroundColor = "grey";
+                }
+                
                 // start the timer for the game delay
                 var myNullVar = setTimeout(startGame, gameDelay);
             }
 
             function startGame () {
-
                 startTimer = Date.now();
                 inPlay = true;
-                const resultAreas = [];
                 // change background colours to gameplay
-                red.style.backgroundColor = "red";
-                blue.style.backgroundColor = "blue";
-                yellow.style.backgroundColor = "yellow";
-                green.style.backgroundColor = "green";
-
-                // collect the results (use an array for this)
-                // make each colour grey when clicked
-
-                // display the results in an alert box
-
-                // reset the colours
-
+                for (let i = 0; i < noOfPlayers; i++) {
+                    document.getElementById(colours[i]).style.backgroundColor = colours[i];
+                }
             }
 
             function areaClicked (area) {
                 // if game is not in play, do nothing
                 if (inPlay && !resultsColours.includes(area)) {
-                    // do something
-                    resultsColours.push(area)
-                    window.console.log(resultsColours)
-                    //reactionTime = Date.now() - startTimer;
-                    resultTimings.push((Date.now() - startTimer))
-                    window.console.log(resultTimings)
-                    
-                    // TODO HERE NEXT TIME!
+                    resultsColours.push(area);
+                    resultTimings.push((Date.now() - startTimer));
                     document.getElementById(area).style.backgroundColor = "grey";
 
-                    if (resultTimings.length == 4) {
+                    if (resultTimings.length == noOfPlayers) {
                         inPlay = false;
-                        showResults();
+                        var myNullVar = setTimeout(showResults(),1000);
                     }
                 }
             }
 
             function showResults () {
-                var results = "1st " + resultsColours[0] + "\t" + resultTimings[0] + "\n" +
-                              "2nd " + resultsColours[1] + "\t" + resultTimings[1] + "\n" +  
-                              "3rd " + resultsColours[2] + "\t" + resultTimings[2] + "\n" +
-                              "4th " + resultsColours[3] + "\t" + resultTimings[3] + "\n";
-                alert(results);
+                for (let i = 0; i < noOfPlayers; i++) {
+                    position = i + 1;
+                    document.getElementById(resultsColours[i]).innerHTML = position + ": " + resultTimings[i]/1000 + " seconds";
+                    document.getElementById(resultsColours[i]).style.verticalAlign = "middle";
+                    document.getElementById(resultsColours[i]).style.textAlign = "center";
+                    document.getElementById(colours[i]).style.backgroundColor = colours[i];
+                }
                 
                 // clear arrays
                 resultsColours.length = 0;
                 resultTimings.length = 0;
             }
 
-            function whichElement(e) {
-                /*var targ;
-                if (!e) {
-                    var e = window.event;
-                }
-                if (e.target) {
-                    //targ = e.target.srcElementID;
-                    targ = e.srcElementID
-                } else if (e.srcElementID) {
-                    targ = e.srcElementID;
-                }
-                alert("You clicked on " + e + ".");
-                */
-            }
-/*            function getArea (e) {
-                var targ;
-                if (!e) {
-                    var e = window.event;
-              } else if (e.srcElement) {
-                    targ = e.srcElementID;
-                    changeColour(targ)
+            function updateTable(players) {
+                noOfPlayersText.innerHTML = players;
+                playingArea.innerHTML = playingTable[players];
+                for (let i = 0; i < noOfPlayers; i++) {
+                    document.getElementById(colours[i]).style.backgroundColor = colours[i];
                 }
             }
-            function changeColour(area) {
-                document.getElementbyID("area1").bgcolor = blue;
+
+            function updatePlayDelay(delay) {
+                playDelaySliderText.innerHTML = delay;
             }
-            */
+
         </script>
     </head>
-    <body onmousedown="whichElement(event.srcElement.id)">
-        
-        <table id="table" width="100%" height="100%">
-            <th width="100%" height="10%" colspan="2">
-                <h1>Reaction Time Game</h1><button onclick="myStartButtonPressed();" title="Start game">Click to start</button>
-            </th>
-            <tr height="45%">
-                <td id="red" width="50%" bgcolor="red" onmousedown="areaClicked(event.srcElement.id)">Area 1</td>
-                <td id="blue" width="50%" bgcolor="blue" onmousedown="areaClicked(this.id)">Area 2</td>
-            </tr>
-            <tr height="45%">
-                <td id="yellow" width="50%" bgcolor="yellow" onmousedown="areaClicked(this.id)">Area 3</td>
-                <td id="green" width="50%" bgcolor="green" onmousedown="areaClicked(this.id)">Area 4</td>
-            </tr>
-        </table>
+    <body onload="updateTable(4);updatePlayDelay(10)">
+                <h1 align="centre">Reaction Time Game</h1>
+                <div class="slidecontainer">
+                    No of players:<input type="range" min="1" max="4" value="4" class="slider" id="noOfPlayersSlider" oninput="updateTable(this.value)"><b id="noOfPlayersText"></b>
+                    Timing max delay:<input type="range" min="3" max="100" value="10" class="slider" id="playDelaySlider" oninput="updatePlayDelay(this.value)"><b id="playDelaySliderText"></b> seconds
+                    <button onclick="myStartButtonPressed();" title="Start game">Click to start</button>
+                </div>
+                  
+            <div id="playingArea"></div>
     </body>
 </html>
