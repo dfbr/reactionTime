@@ -5,6 +5,7 @@
             var noOfPlayers = 4;    // number of players
             var inPlay = false;
             var startTimer;
+            var falseStartLimit = 100;  // miliseconds - aligns with IAAF false start limit
             const resultsColours = [];
             const resultTimings = [];
             const colours = ["red", "blue", "yellow", "green"];
@@ -35,6 +36,7 @@
                 inPlay = true;
                 // change background colours to gameplay
                 for (let i = 0; i < noOfPlayers; i++) {
+                    document.getElementById(colours[i]).innerHTML = "";
                     document.getElementById(colours[i]).style.backgroundColor = colours[i];
                 }
             }
@@ -54,12 +56,21 @@
             }
 
             function showResults () {
+                result = 0;
                 for (let i = 0; i < noOfPlayers; i++) {
-                    position = i + 1;
-                    document.getElementById(resultsColours[i]).innerHTML = position + ": " + resultTimings[i]/1000 + " seconds";
-                    document.getElementById(resultsColours[i]).style.verticalAlign = "middle";
-                    document.getElementById(resultsColours[i]).style.textAlign = "center";
-                    document.getElementById(colours[i]).style.backgroundColor = colours[i];
+                    if (resultTimings[i] < falseStartLimit) {
+                        document.getElementById(resultsColours[i]).innerHTML = "False start: " + resultTimings[i]/1000 + " seconds";
+                        document.getElementById(resultsColours[i]).style.verticalAlign = "middle";
+                        document.getElementById(resultsColours[i]).style.textAlign = "center";
+                        document.getElementById(colours[i]).style.backgroundColor = "grey";
+                    } 
+                    else {
+                        position = i + 1;
+                        document.getElementById(resultsColours[i]).innerHTML = position + ": " + resultTimings[i]/1000 + " seconds";
+                        document.getElementById(resultsColours[i]).style.verticalAlign = "middle";
+                        document.getElementById(resultsColours[i]).style.textAlign = "center";
+                        document.getElementById(colours[i]).style.backgroundColor = colours[i];
+                    }
                 }
                 
                 // clear arrays
@@ -70,7 +81,7 @@
             function updateTable(players) {
                 noOfPlayersText.innerHTML = players;
                 playingArea.innerHTML = playingTable[players];
-                for (let i = 0; i < noOfPlayers; i++) {
+                for (let i = 0; i < players; i++) {
                     document.getElementById(colours[i]).style.backgroundColor = colours[i];
                 }
             }
@@ -78,7 +89,6 @@
             function updatePlayDelay(delay) {
                 playDelaySliderText.innerHTML = delay;
             }
-
         </script>
     </head>
     <body onload="updateTable(4);updatePlayDelay(10)">
