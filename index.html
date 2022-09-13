@@ -6,6 +6,7 @@
             // TODO
             //
             // make lots of functions void if they are done during gameplay
+            // grey/deactivate sliders when game is in play
 
 
             var noOfPlayers = 4;    // number of players
@@ -23,18 +24,23 @@
             playingTable[4] = "<table width='100%' height='100%'><tr width='100%' height='50%'><td id='red' width='50%' height='50%' onmousedown='areaClicked(event.srcElement.id)'></td><td id='blue' width='50%' height='50%' onmousedown='areaClicked(event.srcElement.id)'></td></tr><tr width='100%' height='50%'><td id='yellow' width='50%' height='50%' onmousedown='areaClicked(event.srcElement.id)'></td><td id='green' width='50%' height='50%' onmousedown='areaClicked(event.srcElement.id)'></td></tr></table>";
 
             function myStartButtonPressed() {
-                // a few variables to use for the game
-                var gameDelay = playDelaySlider.value;  // maximum delay after starting
-                gameDelay = Math.floor(Math.random() * gameDelay * 1000);
-                noOfPlayers = noOfPlayersSlider.value;
+                if (!inPlay) {
+                    // a few variables to use for the game
+                    var gameDelay = playDelaySlider.value;  // maximum delay after starting
+                    gameDelay = Math.floor(Math.random() * gameDelay * 1000);
+                    noOfPlayers = noOfPlayersSlider.value;
 
-                // change background colours to grey
-                for (let i = 0; i < noOfPlayers; i++) {
-                    document.getElementById(colours[i]).style.backgroundColor = "grey";
+                    // set the game in play!
+                    inPlay = true;
+
+                    // change background colours to grey
+                    for (let i = 0; i < noOfPlayers; i++) {
+                        document.getElementById(colours[i]).style.backgroundColor = "grey";
+                    }
+                    
+                    // start the timer for the game delay
+                    var myNullVar = setTimeout(startGame, gameDelay);
                 }
-                
-                // start the timer for the game delay
-                var myNullVar = setTimeout(startGame, gameDelay);
             }
 
             function startGame () {
@@ -85,14 +91,17 @@
             }
 
             function updateTable(players) {
-                noOfPlayersText.innerHTML = players;
-                playingArea.innerHTML = playingTable[players];
-                for (let i = 0; i < players; i++) {
-                    document.getElementById(colours[i]).style.backgroundColor = colours[i];
+                if (!inPlay) {
+                    noOfPlayersText.innerHTML = players;
+                    playingArea.innerHTML = playingTable[players];
+                    for (let i = 0; i < players; i++) {
+                        document.getElementById(colours[i]).style.backgroundColor = colours[i];
+                    }
                 }
             }
 
             function updatePlayDelay(delay) {
+                if (inPlay) {return;}
                 playDelaySliderText.innerHTML = delay;
             }
         </script>
